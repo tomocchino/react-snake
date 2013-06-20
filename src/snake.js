@@ -71,7 +71,18 @@ var SnakeGame = React.createClass({
     snake.unshift(head);
     board[head] = BODY;
 
-    this.setState({snake: snake, board: board, growth: growth});
+    if (this._nextDirection) {
+      direction = this._nextDirection;
+      this._nextDirection = null;
+    }
+
+    this.setState({
+      snake: snake,
+      board: board,
+      growth: growth,
+      direction: direction
+    });
+
     setTimeout(this._tick, 100);
   }),
 
@@ -80,7 +91,7 @@ var SnakeGame = React.createClass({
     var difference = Math.abs(this.state.direction - direction);
     // if key is invalid, or the same, or in the opposite direction, ignore it
     if (DIRS[direction] && difference !== 0 && difference !== 2) {
-      this.setState({direction: direction});
+      this._nextDirection = direction;
     }
   }),
 
